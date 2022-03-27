@@ -1,21 +1,22 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import "../assets/Clock.css";
-class Clock extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      date: new Date(),
-    };
-    setInterval(() => {
-      this.setState({
-        date: new Date(),
-      });
-    }, 500);
+import Card from "../UI/Card";
+
+const Clock = () => {
+  const [date, setDate] = useState(new Date());
+
+  function refreshClock() {
+    setDate(new Date());
   }
 
-  render() {
-    return <div className="clock">{this.state.date.toLocaleString()}</div>;
-  }
-}
+  useEffect(() => {
+    const timer = setInterval(refreshClock, 1000);
+    return function cleanup() {
+      clearInterval(timer);
+    };
+  }, []);
+
+  return <Card className="clock">{date.toLocaleString()}</Card>;
+};
 
 export default Clock;
